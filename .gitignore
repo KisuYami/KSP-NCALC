@@ -1,0 +1,4 @@
+/TAGS
+*.d
+*.o
+/build/ksp-calc
