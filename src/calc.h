@@ -8,6 +8,6 @@ struct rocket {
   int isp;
   int wf; // Height with fuel
   int we; // height without fuel
-};
+} newRocket;
 
 #endif // __CALC_H_

@@ -17,7 +17,7 @@ void setupScr() {
   init_pair(3, COLOR_BLUE, COLOR_BLACK);
 }
 
-void displayScr(int entry, char ***menu, struct rocket *working) {
+void displayScr(int entry, const char ***menu) {
 
   int y, x;
   int i, v;
@@ -26,8 +26,8 @@ void displayScr(int entry, char ***menu, struct rocket *working) {
                          "TWR: %d",          "Delta-v: %d",
                          "Weight(Full): %d", "Weight(Empty): %d"};
 
-  char **mainMenu = menu[0];
-  char **menuActive = menu[entry];
+  const char **mainMenu = menu[0];
+  const char **menuActive = menu[entry];
 
   getmaxyx(stdscr, y, x);
 
@@ -44,7 +44,6 @@ void displayScr(int entry, char ***menu, struct rocket *working) {
   // Main menu
   i = 0;
   while (strncmp(mainMenu[i], "\0", 2)) {
-    // for (i = 0; i < listLength; i++) {
 
     mvprintw(i, 1, "[ ]");
     mvprintw(i, 1 + 4, mainMenu[i]);
@@ -61,10 +60,10 @@ void displayScr(int entry, char ***menu, struct rocket *working) {
     }
   }
 
-  mvprintw(0, 2 * v + 2, rocketTable[0], working->name);
-  mvprintw(1, 2 * v + 2, rocketTable[1], working->isp);
-  mvprintw(2, 2 * v + 2, rocketTable[2], working->twr);
-  mvprintw(3, 2 * v + 2, rocketTable[3], working->delta_v);
-  mvprintw(4, 2 * v + 2, rocketTable[4], working->wf);
-  mvprintw(5, 2 * v + 2, rocketTable[5], working->we);
+  mvprintw(0, 2 * v + 2, rocketTable[0], newRocket.name);
+  mvprintw(1, 2 * v + 2, rocketTable[1], newRocket.isp);
+  mvprintw(2, 2 * v + 2, rocketTable[2], newRocket.twr);
+  mvprintw(3, 2 * v + 2, rocketTable[3], newRocket.delta_v);
+  mvprintw(4, 2 * v + 2, rocketTable[4], newRocket.wf);
+  mvprintw(5, 2 * v + 2, rocketTable[5], newRocket.we);
 }
