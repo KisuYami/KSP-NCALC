@@ -16,7 +16,7 @@ const char *cleanMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
 const char **menu[] = {mainMenuEntry, deltavMenuEntry, twrMenuEntry,
                        ispMenuEntry,  printMenuEntry,  cleanMenuEntry};
 // Some lengths
-const size_t menuLenght[] = {5, 3, 2, 2, 3, 2};
+const size_t menuLenght[] = {5, 3, 3, 2, 3, 2};
 
 int main(int argc, char *argv[]) {
 

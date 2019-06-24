@@ -15,4 +15,15 @@ void deltavEvaluate() {
   newRocket.delta_v = 9.8 * newRocket.isp * logf(newRocket.wf / newRocket.we);
 }
 
-void twrEvaluate() {}
+void twrEvaluate() {
+  /* We need two formulas here Thrust and TWR
+   * thrust = force / mass
+   * twr = thrust / G
+   * where:
+   *  - G is 9.8 m/s
+   */
+  if (newRocket.force == 0)
+    newRocket.force = newRocket.asl_vac / newRocket.wf;
+
+  newRocket.twr = newRocket.force / 9.8;
+}
