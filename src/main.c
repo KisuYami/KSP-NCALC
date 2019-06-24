@@ -1,14 +1,15 @@
 #include "calc.h"
 #include "display.h"
 #include "main.h"
+#include <ctype.h>
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
 
 // MenuEntry entries
 const char *mainMenuEntry[] = {"Delta-v", "TWR", "ISP", "Print", "Clean", "\0"};
-const char *deltavMenuEntry[] = {"ISP", "Mass(Empty)", "Mass(Full)", "\0"};
-const char *twrMenuEntry[] = {"Force", "Mass(Full)", "\0"};
+const char *deltavMenuEntry[] = {"ISP", "Weight(Empty)", "Weight(Full)", "\0"};
+const char *twrMenuEntry[] = {"Force", "Weight(Full)", "\0"};
 const char *ispMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
 const char *printMenuEntry[] = {"Name", "File Name", "Print", "\0"};
 const char *cleanMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
   displayScr(cursor + 1, menu);
   mvprintw(cursor, 2, "*");
 
-  while ((key = getch()) != 'q') {
+  while ((key = getch()) != 'q' && key != 27) {
     switch (key) {
 
       // Movement
@@ -69,6 +70,7 @@ int main(int argc, char *argv[]) {
 void subMenu(int sub) {
 
   int cursor, x;
+  float tmpNumber;
   char key;
 
   cursor = 0;
@@ -76,7 +78,7 @@ void subMenu(int sub) {
   x = getmaxx(stdscr);
 
   mvprintw(cursor, 3 + (x / 3), "*");
-  while ((key = getch()) != 'h' && key != 'q') {
+  while ((key = getch()) != 'h' && key != 'q' && key != 27) {
     switch (key) {
 
       // Movement
@@ -89,6 +91,23 @@ void subMenu(int sub) {
       if (cursor - 1 >= 0)
         cursor--;
       break;
+    case 'l':
+      tmpNumber = inputNumbers();
+      // I fucking know
+      if (sub == 0) {
+        if (cursor == 0)
+          newRocket.isp = tmpNumber;
+        if (cursor == 1)
+          newRocket.wf = tmpNumber;
+        if (cursor == 2)
+          newRocket.we = tmpNumber;
+      } else if (sub == 1) {
+        if (cursor == 0)
+          newRocket.force = tmpNumber;
+        if (cursor == 1)
+          newRocket.wf = tmpNumber;
+      }
+      break;
 
     default:
       break;
@@ -98,4 +117,31 @@ void subMenu(int sub) {
     mvprintw(cursor, 3 + (x / 3), "*");
     mvprintw(sub, 2, "*");
   }
+}
+
+// Return inputed number
+float inputNumbers() {
+  int i = 0;
+  int y = getmaxy(stdscr);
+  char charNumber[255] = {0}, key;
+  float number = 0;
+
+  attron(A_STANDOUT | COLOR_PAIR(1));
+  mvprintw(y - 1, 0, "Input Number: ");
+  while ((key = getch()) != 27 && key != 10 && i < 255) {
+    if (isdigit(key) || key == '.') {
+      if (key == 127) {
+        i--;
+      } else {
+        mvprintw(y - 1, i + 14, &key);
+        mvprintw(y - 1, i + 15, " ");
+        mvprintw(y - 1, i + 16, " ");
+        charNumber[i] = key;
+        i++;
+      }
+    }
+  }
+  attroff(A_STANDOUT | COLOR_PAIR(1));
+  number = strtof(charNumber, NULL);
+  return number;
 }

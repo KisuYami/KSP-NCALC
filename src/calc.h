@@ -3,11 +3,12 @@
 
 struct rocket {
   char *name;
-  int delta_v;
-  int twr;
-  int isp;
-  int wf; // Height with fuel
-  int we; // height without fuel
+  float delta_v;
+  float twr;
+  float isp;
+  float force;
+  float wf; // Height with fuel
+  float we; // height without fuel
 } newRocket;
 
 #endif // __CALC_H_

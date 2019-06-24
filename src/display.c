@@ -22,9 +22,10 @@ void displayScr(int entry, const char ***menu) {
   int y, x;
   int i, v;
   // rocket table
-  char *rocketTable[] = {"name: %s",         "ISP: %d",
-                         "TWR: %d",          "Delta-v: %d",
-                         "Weight(Full): %d", "Weight(Empty): %d"};
+  char *rocketTable[] = {"name: \t%s",      "ISP: \t%4.4f",
+                         "TWR: \t%4.4f",    "Delta-v: \t%4.4f",
+                         "Force: \t%4.4f",  "W(Full): \t%4.4f",
+                         "W(Empt): \t%4.4f"};
 
   const char **mainMenu = menu[0];
   const char **menuActive = menu[entry];
@@ -33,11 +34,11 @@ void displayScr(int entry, const char ***menu) {
 
   v = x / 3;
   // Some beuty lines
-  for (i = 0; i < y; i++) {
+  for (i = 0; i < y - 1; i++) {
     mvprintw(i, v, "|");
   }
 
-  for (i = 0; i < y; i++) {
+  for (i = 0; i < y - 1; i++) {
     mvprintw(i, 2 * v, "|");
   }
 
@@ -60,10 +61,10 @@ void displayScr(int entry, const char ***menu) {
     }
   }
 
-  mvprintw(0, 2 * v + 2, rocketTable[0], newRocket.name);
-  mvprintw(1, 2 * v + 2, rocketTable[1], newRocket.isp);
-  mvprintw(2, 2 * v + 2, rocketTable[2], newRocket.twr);
+  mvprintw(0, 2 * v + 2, rocketTable[1], newRocket.isp);
+  mvprintw(1, 2 * v + 2, rocketTable[2], newRocket.twr);
+  mvprintw(2, 2 * v + 2, rocketTable[4], newRocket.force);
   mvprintw(3, 2 * v + 2, rocketTable[3], newRocket.delta_v);
-  mvprintw(4, 2 * v + 2, rocketTable[4], newRocket.wf);
-  mvprintw(5, 2 * v + 2, rocketTable[5], newRocket.we);
+  mvprintw(4, 2 * v + 2, rocketTable[6], newRocket.we);
+  mvprintw(5, 2 * v + 2, rocketTable[5], newRocket.wf);
 }
