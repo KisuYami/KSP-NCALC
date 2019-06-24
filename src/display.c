@@ -22,10 +22,10 @@ void displayScr(int entry, const char ***menu) {
   int y, x;
   int i, v;
   // rocket table
-  char *rocketTable[] = {"name: \t%s",      "ISP: \t%4.4f",
-                         "TWR: \t%4.4f",    "Delta-v: \t%4.4f",
-                         "Force: \t%4.4f",  "W(Full): \t%4.4f",
-                         "W(Empt): \t%4.4f"};
+  char *rocketTable[] = {"name: \t%s",         "ISP: \t%3.2f",
+                         "TWR: \t%3.2f",       "Delta-v: \t%3.2f m/s",
+                         "Force: \t%3.2f",     "W(Full): \t%3.2f t",
+                         "W(Empt): \t%3.2f t", "ASL/VAC: \t%3.2f"};
 
   const char **mainMenu = menu[0];
   const char **menuActive = menu[entry];
@@ -65,6 +65,7 @@ void displayScr(int entry, const char ***menu) {
   mvprintw(1, 2 * v + 2, rocketTable[2], newRocket.twr);
   mvprintw(2, 2 * v + 2, rocketTable[4], newRocket.force);
   mvprintw(3, 2 * v + 2, rocketTable[3], newRocket.delta_v);
-  mvprintw(4, 2 * v + 2, rocketTable[6], newRocket.we);
+  mvprintw(4, 2 * v + 2, rocketTable[7], newRocket.asl_vac);
   mvprintw(5, 2 * v + 2, rocketTable[5], newRocket.wf);
+  mvprintw(6, 2 * v + 2, rocketTable[6], newRocket.we);
 }

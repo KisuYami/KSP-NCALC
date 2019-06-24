@@ -8,8 +8,8 @@
 
 // MenuEntry entries
 const char *mainMenuEntry[] = {"Delta-v", "TWR", "ISP", "Print", "Clean", "\0"};
-const char *deltavMenuEntry[] = {"ISP", "Weight(Empty)", "Weight(Full)", "\0"};
-const char *twrMenuEntry[] = {"Force", "Weight(Full)", "\0"};
+const char *deltavMenuEntry[] = {"ISP", "Weight(Full)", "Weight(Empt)", "\0"};
+const char *twrMenuEntry[] = {"Force", "ASL/VAC", "Weight(Full)", "\0"};
 const char *ispMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
 const char *printMenuEntry[] = {"Name", "File Name", "Print", "\0"};
 const char *cleanMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
@@ -55,6 +55,15 @@ int main(int argc, char *argv[]) {
       subMenu(cursor);
       break;
       // End Movement
+    // Clean the values
+    case 'x':
+      newRocket.delta_v = 0;
+      newRocket.force = 0;
+      newRocket.isp = 0;
+      newRocket.twr = 0;
+      newRocket.we = 0;
+      newRocket.wf = 0;
+      break;
 
     default:
       break;
@@ -105,10 +114,16 @@ void subMenu(int sub) {
         if (cursor == 0)
           newRocket.force = tmpNumber;
         if (cursor == 1)
+          newRocket.asl_vac = tmpNumber;
+        if (cursor == 2)
           newRocket.wf = tmpNumber;
       }
       break;
 
+    // Use this to see the calc results
+    case 'e':
+      evalAll(sub);
+      break;
     default:
       break;
     }
@@ -130,18 +145,29 @@ float inputNumbers() {
   mvprintw(y - 1, 0, "Input Number: ");
   while ((key = getch()) != 27 && key != 10 && i < 255) {
     if (isdigit(key) || key == '.') {
-      if (key == 127) {
-        i--;
-      } else {
-        mvprintw(y - 1, i + 14, &key);
-        mvprintw(y - 1, i + 15, " ");
-        mvprintw(y - 1, i + 16, " ");
-        charNumber[i] = key;
-        i++;
-      }
+
+      mvprintw(y - 1, i + 14, &key);
+      mvprintw(y - 1, i + 15, " ");
+      mvprintw(y - 1, i + 16, " ");
+      charNumber[i] = key;
+      i++;
     }
   }
+
   attroff(A_STANDOUT | COLOR_PAIR(1));
   number = strtof(charNumber, NULL);
   return number;
+}
+
+void evalAll(int cursor) {
+  switch (cursor) {
+  case 0:
+    deltavEvaluate();
+    break;
+  case 1:
+    twrEvaluate();
+    break;
+  default:
+    break;
+  }
 }

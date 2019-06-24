@@ -3,7 +3,7 @@ CC= gcc
 BUILD_DIR = ./build
 SRC_DIRS = ./src
 VERSION = v0.01
-CLIBS= -l ncurses
+CLIBS= -l ncurses -lm
 
 SRCS = $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
 OBJS = $(SRCS:%=$(BUILD_DIR)/%.o)

@@ -3,4 +3,5 @@
 
 float inputNumbers();
 void subMenu(int sub);
+void evalAll(int cursor);
 #endif // __MAIN_H_
