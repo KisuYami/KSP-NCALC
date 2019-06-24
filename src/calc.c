@@ -16,14 +16,24 @@ void deltavEvaluate() {
 }
 
 void twrEvaluate() {
-  /* We need two formulas here Thrust and TWR
+  /* We need two formulas Thrust and TWR
    * thrust = force / mass
    * twr = thrust / G
    * where:
-   *  - G is 9.8 m/s
+   *  - G is the surface gravity
    */
   if (newRocket.force == 0)
     newRocket.force = newRocket.asl_vac / newRocket.wf;
 
-  newRocket.twr = newRocket.force / 9.8;
+  newRocket.twr = newRocket.force / newRocket.gravity;
+}
+
+void ispEvaluete() {
+  /* Isp formula
+   * isp = Ft / m
+   * Where:
+   *  - Ft is thrust in newstons
+   *  - m is a fuel consumption in kg/s
+   * */
+  newRocket.isp = newRocket.force / newRocket.fuelCons;
 }

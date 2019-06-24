@@ -7,16 +7,15 @@
 #include <string.h>
 
 // MenuEntry entries
-const char *mainMenuEntry[] = {"Delta-v", "TWR", "ISP", "Print", "Clean", "\0"};
+const char *mainMenuEntry[] = {"Delta-v", "TWR", "ISP", "\0"};
 const char *deltavMenuEntry[] = {"ISP", "Weight(Full)", "Weight(Empt)", "\0"};
-const char *twrMenuEntry[] = {"Force", "ASL/VAC", "Weight(Full)", "\0"};
-const char *ispMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
-const char *printMenuEntry[] = {"Name", "File Name", "Print", "\0"};
-const char *cleanMenuEntry[] = {"SAMPLE", "SAMPLE", "\0"};
+const char *twrMenuEntry[] = {"Force", "ASL/VAC", "Weight(Full)", "Gravity",
+                              "\0"};
+const char *ispMenuEntry[] = {"Thrust(newtons)", "Fuel Cons(kg/s)", "\0"};
 const char **menu[] = {mainMenuEntry, deltavMenuEntry, twrMenuEntry,
-                       ispMenuEntry,  printMenuEntry,  cleanMenuEntry};
+                       ispMenuEntry};
 // Some lengths
-const size_t menuLenght[] = {5, 3, 3, 2, 3, 2};
+const size_t menuLenght[] = {3, 3, 4, 2, 3, 2};
 
 int main(int argc, char *argv[]) {
 
@@ -30,6 +29,9 @@ int main(int argc, char *argv[]) {
   newRocket.twr = 0;
   newRocket.wf = 0;
   newRocket.we = 0;
+  newRocket.asl_vac = 0;
+  newRocket.gravity = 0;
+  newRocket.force = 0;
   cursor = 0;
 
   // Screen Initialization
@@ -63,6 +65,9 @@ int main(int argc, char *argv[]) {
       newRocket.twr = 0;
       newRocket.we = 0;
       newRocket.wf = 0;
+      newRocket.asl_vac = 0;
+      newRocket.gravity = 0;
+      newRocket.force = 0;
       break;
 
     default:
@@ -117,6 +122,13 @@ void subMenu(int sub) {
           newRocket.asl_vac = tmpNumber;
         if (cursor == 2)
           newRocket.wf = tmpNumber;
+        if (cursor == 3)
+          newRocket.gravity = tmpNumber;
+      } else if (sub == 2) {
+        if (cursor == 0)
+          newRocket.force = tmpNumber;
+        if (cursor == 1)
+          newRocket.fuelCons = tmpNumber;
       }
       break;
 
@@ -168,6 +180,7 @@ void evalAll(int cursor) {
     twrEvaluate();
     break;
   default:
+    ispEvaluete();
     break;
   }
 }

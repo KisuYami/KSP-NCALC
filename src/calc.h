@@ -8,10 +8,13 @@ struct rocket {
   float twr;
   float isp;
   float force;
+  float gravity;
   float delta_v;
   float asl_vac;
+  float fuelCons;
 } newRocket;
 
 void deltavEvaluate();
 void twrEvaluate();
+void ispEvaluete();
 #endif // __CALC_H_
