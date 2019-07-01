@@ -3,10 +3,11 @@
 #define __DISPLAY_H_
 
 struct menu {
-  const char *options[15];
-  const int lenght;
-  float *value[15];
-  struct menu *next; // First time using this shit!
+  const char *options[15]; // The menu entrys in text
+  float *value[15]; // A pointer to the newRocket, so you can change the values
+  const int lenght; // The total number of menu entrys
+  const void (*evaluate)(); // A pointer to a function that should evaluete.
+  struct menu *next;        // First time using this shit!
 };
 
 void setupScr();

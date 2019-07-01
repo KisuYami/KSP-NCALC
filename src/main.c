@@ -6,23 +6,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-// MenuEntry entries
+// MenuEntry entries, see header display.h
 struct menu ispMenu = {{"Force", "Fuel Cons(kg/s)"},
-                       2,
                        {&newRocket.force, &newRocket.fuelCons},
+                       2,
+                       ispEvaluete,
                        NULL};
 struct menu twrMenu = {
     {"Force", "ASL/VAC", "Weight(Full)", "Gravity"},
-    4,
     {&newRocket.force, &newRocket.asl_vac, &newRocket.wf, &newRocket.gravity},
+    4,
+    twrEvaluate,
     &ispMenu};
 struct menu deltavMenu = {{"ISP", "Weight(Full)", "Weight(Empt)"},
-                          3,
                           {&newRocket.isp, &newRocket.wf, &newRocket.we},
+                          3,
+                          deltavEvaluate,
                           &twrMenu};
 struct menu mainMenu = {{"Delta-v", "TWR", "ISP"},
-                        3,
                         {&newRocket.delta_v, &newRocket.twr, &newRocket.isp},
+                        3,
+                        NULL,
                         &deltavMenu};
 
 int main() {
@@ -62,21 +66,11 @@ int main() {
       subMenu(cursor);
       break;
       // End Movement
+
     // Clean the values
     case 'x':
-      newRocket.delta_v = 0;
-      newRocket.force = 0;
-      newRocket.isp = 0;
-      newRocket.twr = 0;
-      newRocket.we = 0;
-      newRocket.wf = 0;
-      newRocket.asl_vac = 0;
-      newRocket.gravity = 0;
-      newRocket.force = 0;
+      newRocket = clean;
       break;
-
-    case 'e':
-      evalAll(cursor);
 
     default:
       break;
@@ -122,8 +116,9 @@ void subMenu(int sub) {
 
     // Use this to see the calc results
     case 'e':
-      evalAll(sub);
+      menuActive->evaluate(); // That is where the pointer to the calc comes to
       break;
+
     default:
       break;
     }
@@ -157,18 +152,4 @@ float inputNumbers() {
   attroff(A_STANDOUT | COLOR_PAIR(1));
   number = strtof(charNumber, NULL);
   return number;
-}
-
-void evalAll(int cursor) {
-  switch (cursor) {
-  case 0:
-    deltavEvaluate();
-    break;
-  case 1:
-    twrEvaluate();
-    break;
-  default:
-    ispEvaluete();
-    break;
-  }
 }
