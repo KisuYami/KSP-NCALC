@@ -7,36 +7,41 @@
 #include <string.h>
 
 // MenuEntry entries
-const char *mainMenuEntry[] = {"Delta-v", "TWR", "ISP", "\0"};
-const char *deltavMenuEntry[] = {"ISP", "Weight(Full)", "Weight(Empt)", "\0"};
-const char *twrMenuEntry[] = {"Force", "ASL/VAC", "Weight(Full)", "Gravity",
-                              "\0"};
-const char *ispMenuEntry[] = {"Thrust(newtons)", "Fuel Cons(kg/s)", "\0"};
-const char **menu[] = {mainMenuEntry, deltavMenuEntry, twrMenuEntry,
-                       ispMenuEntry};
-// Some lengths
-const size_t menuLenght[] = {3, 3, 4, 2, 3, 2};
+struct menu ispMenu = {{"Force", "Fuel Cons(kg/s)"},
+                       2,
+                       {&newRocket.force, &newRocket.fuelCons},
+                       NULL};
+struct menu twrMenu = {
+    {"Force", "ASL/VAC", "Weight(Full)", "Gravity"},
+    4,
+    {&newRocket.force, &newRocket.asl_vac, &newRocket.wf, &newRocket.gravity},
+    &ispMenu};
+struct menu deltavMenu = {{"ISP", "Weight(Full)", "Weight(Empt)"},
+                          3,
+                          {&newRocket.isp, &newRocket.wf, &newRocket.we},
+                          &twrMenu};
+struct menu mainMenu = {{"Delta-v", "TWR", "ISP"},
+                        3,
+                        {&newRocket.delta_v, &newRocket.twr, &newRocket.isp},
+                        &deltavMenu};
 
-int main(int argc, char *argv[]) {
+int main() {
 
   int cursor;
   char key;
 
   // Default Values
-  newRocket.name = "Default";
-  newRocket.delta_v = 0;
-  newRocket.isp = 0;
-  newRocket.twr = 0;
-  newRocket.wf = 0;
-  newRocket.we = 0;
-  newRocket.asl_vac = 0;
-  newRocket.gravity = 0;
-  newRocket.force = 0;
+
+  struct rocket clean = {
+      "Default", 0, 0, 0, 0, 0, 0, 0, 0,
+  };
+
+  newRocket = clean;
   cursor = 0;
 
   // Screen Initialization
   setupScr();
-  displayScr(cursor + 1, menu);
+  displayScr(cursor + 1, mainMenu);
   mvprintw(cursor, 2, "*");
 
   while ((key = getch()) != 'q' && key != 27) {
@@ -44,7 +49,7 @@ int main(int argc, char *argv[]) {
 
       // Movement
     case 'j':
-      if (cursor + 1 < menuLenght[0])
+      if (cursor + 1 < mainMenu.lenght)
         cursor++;
       break;
 
@@ -70,11 +75,14 @@ int main(int argc, char *argv[]) {
       newRocket.force = 0;
       break;
 
+    case 'e':
+      evalAll(cursor);
+
     default:
       break;
     }
     clear();
-    displayScr(cursor + 1, menu);
+    displayScr(cursor + 1, mainMenu);
     mvprintw(cursor, 2, "*");
   }
   endwin();
@@ -84,11 +92,14 @@ int main(int argc, char *argv[]) {
 void subMenu(int sub) {
 
   int cursor, x;
-  float tmpNumber;
   char key;
 
-  cursor = 0;
+  struct menu *menuActive = &mainMenu;
+  for (x = 0; x <= sub; x++) {
+    menuActive = menuActive->next;
+  }
 
+  cursor = 0;
   x = getmaxx(stdscr);
 
   mvprintw(cursor, 3 + (x / 3), "*");
@@ -97,7 +108,7 @@ void subMenu(int sub) {
 
       // Movement
     case 'j':
-      if (cursor + 1 < menuLenght[sub + 1])
+      if (cursor + 1 < menuActive->lenght)
         cursor++;
       break;
 
@@ -106,30 +117,7 @@ void subMenu(int sub) {
         cursor--;
       break;
     case 'l':
-      tmpNumber = inputNumbers();
-      // I fucking know
-      if (sub == 0) {
-        if (cursor == 0)
-          newRocket.isp = tmpNumber;
-        if (cursor == 1)
-          newRocket.wf = tmpNumber;
-        if (cursor == 2)
-          newRocket.we = tmpNumber;
-      } else if (sub == 1) {
-        if (cursor == 0)
-          newRocket.force = tmpNumber;
-        if (cursor == 1)
-          newRocket.asl_vac = tmpNumber;
-        if (cursor == 2)
-          newRocket.wf = tmpNumber;
-        if (cursor == 3)
-          newRocket.gravity = tmpNumber;
-      } else if (sub == 2) {
-        if (cursor == 0)
-          newRocket.force = tmpNumber;
-        if (cursor == 1)
-          newRocket.fuelCons = tmpNumber;
-      }
+      *menuActive->value[cursor] = inputNumbers();
       break;
 
     // Use this to see the calc results
@@ -140,7 +128,7 @@ void subMenu(int sub) {
       break;
     }
     clear();
-    displayScr(sub + 1, menu);
+    displayScr(sub + 1, mainMenu);
     mvprintw(cursor, 3 + (x / 3), "*");
     mvprintw(sub, 2, "*");
   }

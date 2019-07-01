@@ -1,6 +1,7 @@
 TARGET_EXEC = ksp-calc
 CC= gcc
 BUILD_DIR = ./build
+DESTDIR = /usr/local/bin/
 SRC_DIRS = ./src
 VERSION = v0.01
 CLIBS= -l ncurses -lm
@@ -25,6 +26,9 @@ $(BUILD_DIR)/%.c.o: %.c
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+
+install: $(BUILD_DIR)/$(TARGET_EXEC)
+	cp ${BUILD_DIR}/${TARGET_EXEC} ${DESTDIR}
 
 -include $(DEPS)
 

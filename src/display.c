@@ -17,7 +17,7 @@ void setupScr() {
   init_pair(3, COLOR_BLUE, COLOR_BLACK);
 }
 
-void displayScr(int entry, const char ***menu) {
+void displayScr(int entry, const struct menu menu) {
 
   int y, x;
   int i, v;
@@ -28,13 +28,17 @@ void displayScr(int entry, const char ***menu) {
                          "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
                          "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
 
-  const char **mainMenu = menu[0];
-  const char **menuActive = menu[entry];
+  const struct menu *menuActive = &menu;
+  for (x = 0; x < entry; x++) {
+    if (menuActive->next == NULL) // Be sure to not fuck up
+      break;
+    menuActive = menuActive->next;
+  }
 
   getmaxyx(stdscr, y, x);
 
   v = x / 3;
-  // Some beuty lines
+  // Some cozy lines
   for (i = 0; i < y - 1; i++) {
     mvprintw(i, v, "|");
   }
@@ -45,20 +49,17 @@ void displayScr(int entry, const char ***menu) {
 
   // Main menu
   i = 0;
-  while (strncmp(mainMenu[i], "\0", 2)) {
-
+  for (i = 0; i < menu.lenght; i++) {
     mvprintw(i, 1, "[ ]");
-    mvprintw(i, 1 + 4, mainMenu[i]);
-    i++;
+    mvprintw(i, 1 + 4, menu.options[i]);
   }
 
   if (entry >= 0) {
     i = 0;
-    while (strncmp(menuActive[i], "\0", 2)) {
+    for (i = 0; i < menuActive->lenght; i++) {
 
       mvprintw(i, 2 + v, "[ ]");
-      mvprintw(i, 2 + 4 + v, menuActive[i]);
-      i++;
+      mvprintw(i, 2 + 4 + v, menuActive->options[i]);
     }
   }
 

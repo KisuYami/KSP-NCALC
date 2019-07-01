@@ -1,6 +1,5 @@
 #include "calc.h"
 #include <math.h>
-#include <ncurses.h>
 #include <stdlib.h>
 
 void deltavEvaluate() {
@@ -16,7 +15,7 @@ void deltavEvaluate() {
 }
 
 void twrEvaluate() {
-  /* We need two formulas Thrust and TWR
+  /* We need two formulas, Thrust and TWR
    * thrust = force / mass
    * twr = thrust / G
    * where:
