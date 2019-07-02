@@ -1,7 +1,7 @@
 #ifndef __CALC_H_
 #define __CALC_H_
 
-struct rocket {
+struct calc_data {
   char *name;
   float wf; // Height with fuel
   float we; // height without fuel

@@ -1,0 +1,72 @@
+#+TITLE: KSP-NCALC
+
+* Why i did this? One day...
+ Nothing better to do, i guess.
+
+** Install
+The binnary will be in build, do what float you bloat.
+#+BEGIN_SRC sh
+make
+make install
+#+END_SRC
+
+** Modification
+So you want to make something usefull with my code? Make another calculator?
+
+*** FIRST: Understand my logic
+I am gay, so i don't think straight
+
+*** B: Look at the calc_values in calc.h
+#+BEGIN_SRC c
+struct calc_data {
+  char *name;
+  float wf; // Height with fuel
+  float we; // height without fuel
+  float twr;
+  float isp;
+  float force;
+  float gravity;
+  float delta_v;
+  float asl_vac;
+  float fuelCons;
+} newRocket;
+#+END_SRC
+
+*** 3: The displayed table:
+All the values here are represented in the calc_values from display.c, and in
+the program showed in the right-wing corner. You have to change manually the
+values from calc_values.
+TODO: Make this automatic.
+
+#+BEGIN_SRC c
+char *calc_values[] = {"name: \t%s",       "ISP: \t%3.2f",
+                       "TWR: \t%3.2f",     "Delta-v: \t%3.2f",
+                       "Force: \t%3.2f",   "W(Full): \t%3.2f",
+                       "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
+                       "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
+#+END_SRC
+
+The code that print the table:
+#+BEGIN_SRC c
+mvprintw(0, 2 * v + 2, calc_values[1], newRocket.isp);
+mvprintw(1, 2 * v + 2, calc_values[2], newRocket.twr);
+mvprintw(2, 2 * v + 2, calc_values[4], newRocket.force);
+mvprintw(3, 2 * v + 2, calc_values[8], newRocket.fuelCons);
+mvprintw(4, 2 * v + 2, calc_values[9], newRocket.gravity);
+mvprintw(5, 2 * v + 2, calc_values[3], newRocket.delta_v);
+mvprintw(6, 2 * v + 2, calc_values[7], newRocket.asl_vac);
+mvprintw(7, 2 * v + 2, calc_values[5], newRocket.wf);
+mvprintw(8, 2 * v + 2, calc_values[6], newRocket.we);
+#+END_SRC
+
+*** Cozy: The menu
+This is the last part that you should look, see? this is very cozy(0_0), ba-baka.
+#+BEGIN_SRC c
+struct menu {
+  const char *options[15]; // The menu entrys in text
+  float *value[15]; // A pointer to the newRocket, so you can change the values
+  const int lenght; // The total number of menu entrys
+  const void (*evaluate)(); // A pointer to a function that should evaluete.
+  struct menu *next;        // First time using this shit!
+};
+#+END_SRC

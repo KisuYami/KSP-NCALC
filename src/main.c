@@ -36,7 +36,7 @@ int main() {
 
   // Default Values
 
-  struct rocket clean = {
+  struct calc_data clean = {
       "Default", 0, 0, 0, 0, 0, 0, 0, 0,
   };
 
