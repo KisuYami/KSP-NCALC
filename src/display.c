@@ -19,14 +19,14 @@ void setupScr() {
 
 void displayScr(int entry, const struct menu menu) {
 
-  int y, x;
+  int x, y;
   int i, v;
   // rocket table
-  char *calc_values[] = {"name: \t%s",       "ISP: \t%3.2f",
-                         "TWR: \t%3.2f",     "Delta-v: \t%3.2f",
-                         "Force: \t%3.2f",   "W(Full): \t%3.2f",
-                         "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
-                         "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
+  const char *calc_values[] = {"name: \t%s",       "ISP: \t%3.2f",
+                               "TWR: \t%3.2f",     "Delta-v: \t%3.2f",
+                               "Force: \t%3.2f",   "W(Full): \t%3.2f",
+                               "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
+                               "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
 
   const struct menu *menuActive = &menu;
   for (x = 0; x < entry; x++) {
@@ -41,28 +41,26 @@ void displayScr(int entry, const struct menu menu) {
   // Some cozy lines
   for (i = 0; i < y - 1; i++) {
     mvprintw(i, v, "|");
-  }
-
-  for (i = 0; i < y - 1; i++) {
     mvprintw(i, 2 * v, "|");
   }
 
-  // Main menu
+  // menus
   i = 0;
-  for (i = 0; i < menu.lenght; i++) {
-    mvprintw(i, 1, "[ ]");
-    mvprintw(i, 1 + 4, menu.options[i]);
-  }
+  while (i <= menu.lenght && i <= menuActive->lenght) {
 
-  if (entry >= 0) {
-    i = 0;
-    for (i = 0; i < menuActive->lenght; i++) {
+    if (i < menu.lenght) {
+      mvprintw(i, 1, "[ ]");
+      mvprintw(i, 1 + 4, menu.options[i]);
+    }
 
+    if (i < menuActive->lenght) {
       mvprintw(i, 2 + v, "[ ]");
       mvprintw(i, 2 + 4 + v, menuActive->options[i]);
     }
+    i++;
   }
 
+  // TODO: Make the table generation at display.c automatic.
   mvprintw(0, 2 * v + 2, calc_values[1], newRocket.isp);
   mvprintw(1, 2 * v + 2, calc_values[2], newRocket.twr);
   mvprintw(2, 2 * v + 2, calc_values[4], newRocket.force);
