@@ -16,7 +16,7 @@ So you want to make something usefull with my code? Make another calculator?
 *** FIRST: Understand my logic
 I am gay, so i don't think straight
 
-*** B: Look at the calc_values in calc.h
+*** B: Look at the calc_values in [[file:./src/calc.h][calc.h]]
 #+BEGIN_SRC c
 struct calc_data {
   char *name;
@@ -37,7 +37,7 @@ All the values here are represented in the calc_table from display.c, and in
 the program showed in the right-wing corner. You have to change manually the
 values from calc_table.
 
-The struct:
+Look at the struct, in [[file:./src/display.h][display.h]]:
 #+BEGIN_SRC c
 struct display_table {
   const char *entry;
@@ -45,7 +45,7 @@ struct display_table {
 };
 #+END_SRC
 
-The default table:
+The default table at [[file:./src/display.c][display.c]]:
 #+BEGIN_SRC c
   struct display_table calc_table[] = {
       {"ISP: \t%3.2f", newRocket.isp}, // 9 entrys
@@ -59,9 +59,9 @@ The default table:
       {"Gravity: \t%3.2f", newRocket.gravity}};
 #+END_SRC
 
-
 *** Cozy: The menu
-This is the last part that you should look, see? this is very cozy(0_0), ba-baka.
+This is the last part that you should look, see? this is very cozy(0_0),
+ba-baka. In [[file:./src/display.h][display.h]]
 #+BEGIN_SRC c
 struct menu {
   const char *options[15]; // The menu entrys in text
