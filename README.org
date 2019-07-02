@@ -1,7 +1,7 @@
 #+TITLE: KSP-NCALC
 
 * Why i did this? One day...
- Nothing better to do, i guess.
+Nothing better to do, i guess.
 
 ** Install
 The binnary will be in build, do what float you bloat.
@@ -33,30 +33,32 @@ struct calc_data {
 #+END_SRC
 
 *** 3: The displayed table:
-All the values here are represented in the calc_values from display.c, and in
+All the values here are represented in the calc_table from display.c, and in
 the program showed in the right-wing corner. You have to change manually the
-values from calc_values.
+values from calc_table.
 
+The struct:
 #+BEGIN_SRC c
-char *calc_values[] = {"name: \t%s",       "ISP: \t%3.2f",
-                       "TWR: \t%3.2f",     "Delta-v: \t%3.2f",
-                       "Force: \t%3.2f",   "W(Full): \t%3.2f",
-                       "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
-                       "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
+struct display_table {
+  const char *entry;
+  float data;
+};
 #+END_SRC
 
-The code that print the table:
+The default table:
 #+BEGIN_SRC c
-mvprintw(0, 2 * v + 2, calc_values[1], newRocket.isp);
-mvprintw(1, 2 * v + 2, calc_values[2], newRocket.twr);
-mvprintw(2, 2 * v + 2, calc_values[4], newRocket.force);
-mvprintw(3, 2 * v + 2, calc_values[8], newRocket.fuelCons);
-mvprintw(4, 2 * v + 2, calc_values[9], newRocket.gravity);
-mvprintw(5, 2 * v + 2, calc_values[3], newRocket.delta_v);
-mvprintw(6, 2 * v + 2, calc_values[7], newRocket.asl_vac);
-mvprintw(7, 2 * v + 2, calc_values[5], newRocket.wf);
-mvprintw(8, 2 * v + 2, calc_values[6], newRocket.we);
+  struct display_table calc_table[] = {
+      {"ISP: \t%3.2f", newRocket.isp}, // 9 entrys
+      {"TWR: \t%3.2f", newRocket.twr},
+      {"Force: \t%3.2f", newRocket.force},
+      {"Fuel.C: \t%3.2f", newRocket.fuelCons},
+      {"Delta-v: \t%3.2f", newRocket.delta_v},
+      {"W(Full): \t%3.2f", newRocket.wf},
+      {"W(Empt): \t%3.2f", newRocket.we},
+      {"ASL/VAC: \t%3.2f", newRocket.asl_vac},
+      {"Gravity: \t%3.2f", newRocket.gravity}};
 #+END_SRC
+
 
 *** Cozy: The menu
 This is the last part that you should look, see? this is very cozy(0_0), ba-baka.

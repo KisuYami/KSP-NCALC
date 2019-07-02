@@ -22,13 +22,18 @@ void displayScr(int entry, const struct menu menu) {
   int x, y;
   int i, v;
   // rocket table
-  const char *calc_values[] = {"name: \t%s",       "ISP: \t%3.2f",
-                               "TWR: \t%3.2f",     "Delta-v: \t%3.2f",
-                               "Force: \t%3.2f",   "W(Full): \t%3.2f",
-                               "W(Empt): \t%3.2f", "ASL/VAC: \t%3.2f",
-                               "Fuel.C: \t%3.2f",  "Gravity: \t%3.2f"};
-
   const struct menu *menuActive = &menu;
+  struct display_table calc_table[] = {
+      {"ISP: \t%3.2f", newRocket.isp}, // 9 entrys
+      {"TWR: \t%3.2f", newRocket.twr},
+      {"Force: \t%3.2f", newRocket.force},
+      {"Fuel.C: \t%3.2f", newRocket.fuelCons},
+      {"Delta-v: \t%3.2f", newRocket.delta_v},
+      {"W(Full): \t%3.2f", newRocket.wf},
+      {"W(Empt): \t%3.2f", newRocket.we},
+      {"ASL/VAC: \t%3.2f", newRocket.asl_vac},
+      {"Gravity: \t%3.2f", newRocket.gravity}};
+
   for (x = 0; x < entry; x++) {
     if (menuActive->next == NULL) // Be sure to not fuck up
       break;
@@ -60,14 +65,7 @@ void displayScr(int entry, const struct menu menu) {
     i++;
   }
 
-  // TODO: Make the table generation at display.c automatic.
-  mvprintw(0, 2 * v + 2, calc_values[1], newRocket.isp);
-  mvprintw(1, 2 * v + 2, calc_values[2], newRocket.twr);
-  mvprintw(2, 2 * v + 2, calc_values[4], newRocket.force);
-  mvprintw(3, 2 * v + 2, calc_values[8], newRocket.fuelCons);
-  mvprintw(4, 2 * v + 2, calc_values[9], newRocket.gravity);
-  mvprintw(5, 2 * v + 2, calc_values[3], newRocket.delta_v);
-  mvprintw(6, 2 * v + 2, calc_values[7], newRocket.asl_vac);
-  mvprintw(7, 2 * v + 2, calc_values[5], newRocket.wf);
-  mvprintw(8, 2 * v + 2, calc_values[6], newRocket.we);
+  for (i = 0; i < sizeof(calc_table) / sizeof(calc_table[0]); i++) {
+    mvprintw(i, 2 * v + 2, calc_table[i].entry, calc_table[i].data);
+  }
 }

@@ -10,6 +10,11 @@ struct menu {
   struct menu *next;        // First time using this shit!
 };
 
+struct display_table {
+  const char *entry;
+  float data;
+};
+
 void setupScr();
 void displayScr(int entry, const struct menu menu);
 void inputSubmenu(int cursor);
